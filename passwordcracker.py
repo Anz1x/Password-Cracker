@@ -3,6 +3,8 @@
 import hashlib
 import colorama
 import time
+import os
+import sys
 from colorama import Fore
 
 colorama.init(autoreset=True)
@@ -18,6 +20,11 @@ time.sleep(1)
 
 hash_alg = str(input(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX} Hash Algorithm ({Fore.LIGHTGREEN_EX}MD5{Fore.LIGHTYELLOW_EX}, {Fore.LIGHTGREEN_EX}SHA-1{Fore.LIGHTYELLOW_EX}, {Fore.LIGHTGREEN_EX}SHA256 {Fore.LIGHTYELLOW_EX}are supported): " + Fore.LIGHTGREEN_EX))
 passwd_list = str(input(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX} Path to Password file: " + Fore.LIGHTGREEN_EX))
+
+if os.path.exists(passwd_list) == False:
+    print(Fore.RED + "[-] Unable to locate the file/path")
+    sys.exit(1)
+
 hashed_passwd = str(input(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX} Hashed Password: " + Fore.LIGHTGREEN_EX))
 
 with open(passwd_list, "r") as file:
@@ -36,7 +43,7 @@ with open(passwd_list, "r") as file:
             if password == hashed_passwd:
                 print(f"\n{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX} Found the SHA-1 Password: {Fore.LIGHTGREEN_EX + line.strip()}")
 
-        # SHA-1        
+        # SHA256       
         if hash_alg == "sha256" or hash_alg == "SHA256":
             hash_obj = hashlib.sha256(line.strip().encode('utf-8'))
             password = hash_obj.hexdigest()
